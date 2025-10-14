@@ -1,17 +1,15 @@
 # .github/workflows/on-prerelease.yml
 name: On Pre-Release
-
 on:
   release:
-    types: [published]
-
+    types: [published, prereleased]  # initial publish as prerelease + explicit prerelease action
 jobs:
   on-prerelease:
-    if: github.event.release.prerelease == true    # only prereleases
+    if: github.event.release.prerelease == true
     runs-on: ubuntu-latest
     steps:
       - name: Print info
         run: |
-          echo "🚀 Pre-release detected!"
-          echo "Tag: ${{ github.event.release.tag_name }}"
-          echo "Release name: ${{ github.event.release.name }}"
+          echo "Pre-release detected"
+          echo "action=${{ github.event.action }}"
+          echo "tag=${{ github.event.release.tag_name }}"

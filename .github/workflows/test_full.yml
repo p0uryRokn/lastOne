@@ -1,17 +1,15 @@
 # .github/workflows/on-release.yml
 name: On Full Release
-
 on:
   release:
-    types: [published]   # fires when a release is published (includes created from tag)
-
+    types: [published, released]  # initial publish + convert prerelease→release
 jobs:
   on-release:
-    if: github.event.release.prerelease == false   # only full releases
+    if: github.event.release.prerelease == false
     runs-on: ubuntu-latest
     steps:
       - name: Print info
         run: |
-          echo "🎉 Full release detected!"
-          echo "Tag: ${{ github.event.release.tag_name }}"
-          echo "Release name: ${{ github.event.release.name }}"
+          echo "Full release detected"
+          echo "action=${{ github.event.action }}"
+          echo "tag=${{ github.event.release.tag_name }}"
