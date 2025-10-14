@@ -2,7 +2,7 @@
 name: On Full Release
 on:
   release:
-    types: [published, released]  # initial publish + convert prerelease→release
+    types: [released]  # initial publish + convert prerelease→release
 jobs:
   on-release:
     if: github.event.release.prerelease == false

@@ -2,7 +2,7 @@
 name: On Pre-Release
 on:
   release:
-    types: [published, prereleased]  # initial publish as prerelease + explicit prerelease action
+    types: [prereleased]  # initial publish as prerelease + explicit prerelease action
 jobs:
   on-prerelease:
     if: github.event.release.prerelease == true
