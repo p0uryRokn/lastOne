@@ -26,8 +26,10 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits",
+        "writerOpts": {
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+        },
         "presetConfig": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})",
           "types": [
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug Fixes" },
