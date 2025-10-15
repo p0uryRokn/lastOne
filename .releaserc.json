@@ -28,7 +28,7 @@
         "preset": "conventionalcommits",
         "writerOpts": {
           "mainTemplate": "## What's Changed\n\n{{#each commitGroups}}\n### {{title}}\n{{#each commits}}\n{{> commit}}\n{{/each}}\n{{/each}}\n\n{{> footer}}",
-          "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})\n",
+          "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})\n"
         },
         "presetConfig": {
           "types": [
