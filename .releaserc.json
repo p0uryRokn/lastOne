@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+          "footerPartial": "### Contributors\n{{#each committers}}\n- {{name}} ({{email}})\n{{/each}}\n"
         },
         "presetConfig": {
           "types": [
