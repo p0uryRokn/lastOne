@@ -2,16 +2,59 @@
   "branches": ["main"],
   "plugins": [
     [
-      "@semantic-release/commit-analyzer"
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "breaking": true, "release": "major" },
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+          { "type": "test", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "docs", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "build", "release": "patch" },
+          { "type": "ci", "release": "patch" }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+        }
+      }
     ],
     [
-      "@semantic-release/release-notes-generator"
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "writerOpts": {
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})\n\n{{#if committers.length}}\n### 👥 Contributors\n{{#each committers}}\n- {{this.name}} {{#if this.username}}([@{{this.username}}](https://github.com/{{this.username}})){{/if}}\n{{/each}}\n{{/if}}"
+        },
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "Features" },
+            { "type": "fix", "section": "Bug Fixes" },
+            { "type": "chore", "section": "Chores" },
+            { "type": "test", "section": "Tests" },
+            { "type": "docs", "section": "Documentation" },
+            { "type": "refactor", "section": "Refactoring" },
+            { "type": "style", "section": "Style" },
+            { "type": "build", "section": "Build System" },
+            { "type": "ci", "section": "Continuous Integration" }
+          ]
+        }
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "echo \"### 👥 Contributors\" > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an (%ae)' | sort | uniq >> CONTRIBUTORS.md"
+      }
     ],
     [
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n<%= require('fs').readFileSync('CONTRIBUTORS.md', 'utf8') %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
       }
     ]
   ]
