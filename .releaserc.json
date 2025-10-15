@@ -28,8 +28,7 @@
         "preset": "conventionalcommits",
         "writerOpts": {
           "mainTemplate": "## What's Changed\n\n{{#each commitGroups}}\n### {{title}}\n{{#each commits}}\n{{> commit}}\n{{/each}}\n{{/each}}\n\n{{> footer}}",
-          "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})",
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+          "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})"
         },
         "presetConfig": {
           "types": [
@@ -50,6 +49,8 @@
       "@semantic-release/github",
       {
         "draftRelease": true,
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n**Full Changelog:** [<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+
       }
     ]
   ]
