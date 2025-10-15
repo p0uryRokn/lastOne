@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})\n"
+            "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}}) ([{{shortHash}}]({{@root.linkReferences}}/commit/{{hash}}))\n"
         },
         "presetConfig": {
           "types": [
