@@ -26,6 +26,9 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits",
+        "writerOpts": {
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+        },
         "presetConfig": {
           "types": [
             { "type": "feat", "section": "Features" },
@@ -42,17 +45,10 @@
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "git shortlog -sne ${lastRelease.gitTag}..HEAD | sed 's/^.*\\t/- /' > CONTRIBUTORS.txt",
-        "publishCmd": "echo \"${nextRelease.notes}\n\n### 🧑‍🤝‍🧑 Contributors\n$(cat CONTRIBUTORS.txt)\" > RELEASE_BODY.md"
-      }
-    ],
-    [
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyFile": "RELEASE_BODY.md"
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
       }
     ]
   ]
