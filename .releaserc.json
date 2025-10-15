@@ -42,9 +42,16 @@
       }
     ],
     [
+      "@semantic-release/exec",
+      {
+        "generateNotesCmd": "GH_API_RES=$(curl -s -X POST -H \"Authorization: token $GH_TOKEN\" -H \"Accept: application/vnd.github+json\" https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/releases/generate-notes -d \"{ \\\"tag_name\\\": \\\"${lastRelease.gitTag}\\\", \\\"target_commitish\\\": \\\"${nextRelease.channel || ''}\\\" }\" ) && echo \"$GH_API_RES\" | jq -r .body > gh-notes.md",
+        "prepareCmd": "echo \"$(cat gh-notes.md)\" > GITHUB_RELEASE_BODY"
+      }
+    ],
+    [
       "@semantic-release/github",
       {
-        "releaseBodyTemplate": "\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
+        "releaseBodyTemplate": "<%= fs.readFileSync('GITHUB_RELEASE_BODY','utf-8') %>"
       }
     ]
   ]
