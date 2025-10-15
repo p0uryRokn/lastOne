@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+          "footerPartial": "\\n\\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
         },
         "presetConfig": {
           "types": [
@@ -48,6 +48,8 @@
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n**Full Changelog:** [<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\\n\\n**Full Changelog:** [<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+      }
+    ]
   ]
 }
