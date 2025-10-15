@@ -46,6 +46,7 @@
       {
         "draftRelease": true,
         "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+      }
     ]
   ]
 }
