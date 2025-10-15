@@ -26,9 +26,6 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits",
-        "writerOpts": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
-        },
         "presetConfig": {
           "types": [
             { "type": "feat", "section": "Features" },
@@ -48,7 +45,7 @@
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %><%\n  const seen = new Set();\n  const isBot = (id) => /\\[bot\\]$/i.test(id || '') || /(^|-)bot($|-)/i.test(id || '');\n  const contributors = [];\n  (commits || []).forEach(c => {\n    const a = c.author || {};\n    const login = (a.login || a.username || '').trim();\n    const name = (a.name || '').trim() || ((a.email || '').split('@')[0] || '').trim();\n    const key = (login || name || '').toLowerCase();\n    if (!key || isBot(key) || seen.has(key)) return;\n    seen.add(key);\n    contributors.push(login ? '@' + login : name);\n  });\n%><% if (contributors.length) { %>\n\n### Contributors\n<% contributors.forEach(u => { %>- <%= u %>\n<% }) %><% } %>"
+        "releaseBodyTemplate": "<%= nextRelease.notes %><%\\n  // Build unique contributor handles from this release's commits\\n  const seen = new Set();\\n  const isBot = (id) => /\\\\[bot\\\\]$/i.test(id||'') || /(^|-)bot($|-)$/i.test(id||'');\\n  const users = [];\\n  (commits || []).forEach(c => {\\n    const a = c.author || {};\\n    let login = (a.login || a.username || '').trim();\\n    // Fallback: extract from GitHub noreply email formats (12345+user@users.noreply.github.com or user@users.noreply.github.com)\\n    if (!login && a.email) {\\n      const m = String(a.email).toLowerCase().match(/^(?:\\\\d+\\+)?([a-z0-9-]+)@users\\\\.noreply\\\\.github\\\\.com$/);\\n      if (m) login = m[1];\\n    }\\n    if (!login || seen.has(login) || isBot(login)) return;\\n    seen.add(login);\\n    users.push(login);\\n  });\\n%><% if (users.length) { %>\\n\\n### Contributors\\n<p><% users.forEach(u => { %><a href=\\"https://github.com/<%= u %>\\"><img src=\\"https://github.com/<%= u %>.png?size=64\\" width=\\"48\\" height=\\"48\\" alt=\\"@<%= u %>\\" title=\\"@<%= u %>\\"></a> <% }) %></p>\\n\\nThanks to <% for (let i=0; i<users.length; i++) { %>@<%= users[i] %><% if (i < users.length - 1) { %>, <% } %><% } %>!\\n<% } %><% if (lastRelease && lastRelease.gitTag) { %>\\n\\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)\\n<% } %>"
       }
     ]
   ]
