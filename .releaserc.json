@@ -44,8 +44,7 @@
     [
       "@semantic-release/github",
       {
-        "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n### 👥 Contributors\n<% try { %>\n<% const { execSync } = require('child_process'); %>\n<% const repo = execSync('git config --get remote.origin.url').toString().trim().match(/github\\.com[:/](.*)\\.git$/)[1]; %>\n<% const raw = execSync(`curl -s -H 'Accept: application/vnd.github+json' https://api.github.com/repos/${repo}/contributors?per_page=100`).toString(); %>\n<% const contributors = JSON.parse(raw); %>\n<%= contributors.map(c => `[![@${c.login}](${c.avatar_url}&s=40)](${c.html_url})`).join(' ') %>\n<% } catch (e) { %>\n_No contributor data available._\n<% } %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
+        "releaseBodyTemplate": "\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
       }
     ]
   ]
