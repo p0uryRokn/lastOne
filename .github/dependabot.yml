@@ -17,10 +17,15 @@ updates:
       include: "scope"
     groups:
       # Version-Updates bündeln (Minor & Patch -> 1 PR)
-      npm-minor-patch:
+      npm-prod-minor-patch:
         applies-to: version-updates
         update-types: ["minor", "patch"]
-        dependency-type: all
+        dependency-type: production
+      npm-dev-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        dependency-type: development
+
       # Security-Updates bündeln (kleine Sprünge)
       npm-security:
         applies-to: security-updates
