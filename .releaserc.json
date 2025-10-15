@@ -1,52 +1,25 @@
 {
   "branches": ["main"],
   "plugins": [
-    [
-      "@semantic-release/commit-analyzer",
-      {
-        "preset": "conventionalcommits",
-        "releaseRules": [
-          { "breaking": true, "release": "major" },
-          { "type": "feat", "release": "minor" },
-          { "type": "fix", "release": "patch" },
-          { "type": "chore", "release": "patch" },
-          { "type": "test", "release": "patch" },
-          { "type": "refactor", "release": "patch" },
-          { "type": "docs", "release": "patch" },
-          { "type": "style", "release": "patch" },
-          { "type": "build", "release": "patch" },
-          { "type": "ci", "release": "patch" }
-        ],
-        "parserOpts": {
-          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
-        }
-      }
-    ],
-    [
-      "@semantic-release/release-notes-generator",
-      {
-        "preset": "conventionalcommits",
-        "presetConfig": {
-          "types": [
-            { "type": "feat", "section": "Features" },
-            { "type": "fix", "section": "Bug Fixes" },
-            { "type": "chore", "section": "Chores" },
-            { "type": "test", "section": "Tests" },
-            { "type": "docs", "section": "Documentation" },
-            { "type": "refactor", "section": "Refactoring" },
-            { "type": "style", "section": "Style" },
-            { "type": "build", "section": "Build System" },
-            { "type": "ci", "section": "Continuous Integration" }
-          ]
-        }
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %>" 
-      }
-    ]
+    ["@semantic-release/commit-analyzer", {
+      "preset": "conventionalcommits",
+      "releaseRules": [
+        { "breaking": true, "release": "major" },
+        { "type": "feat", "release": "minor" },
+        { "type": "fix", "release": "patch" },
+        { "type": "chore", "release": "patch" },
+        { "type": "test", "release": "patch" },
+        { "type": "refactor", "release": "patch" },
+        { "type": "docs", "release": "patch" },
+        { "type": "style", "release": "patch" }
+      ]
+    }],
+    ["@semantic-release/exec", {
+      "generateNotesCmd": "node scripts/gh-notes.js ${nextRelease.version} ${lastRelease.gitTag} ${branch.name} ${options.repositoryUrl}"
+    }],
+    ["@semantic-release/github", {
+      "draftRelease": true,
+      "releaseBodyTemplate": "<%= nextRelease.notes %>"  // keep exactly this
+    }]
   ]
 }
