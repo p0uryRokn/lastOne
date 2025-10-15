@@ -26,6 +26,9 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits",
+        "writerOpts": {
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+        },
         "presetConfig": {
           "types": [
             { "type": "feat", "section": "Features" },
@@ -42,16 +45,10 @@
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "generateNotesCmd": "GH_API_RES=$(curl -s -X POST -H \"Authorization: token $GH_TOKEN\" -H \"Accept: application/vnd.github+json\" https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/releases/generate-notes -d \"{ \\\"tag_name\\\": \\\"${lastRelease.gitTag}\\\", \\\"target_commitish\\\": \\\"${nextRelease.channel || ''}\\\" }\" ) && echo \"$GH_API_RES\" | jq -r .body > gh-notes.md",
-        "prepareCmd": "echo \"$(cat gh-notes.md)\" > GITHUB_RELEASE_BODY"
-      }
-    ],
-    [
       "@semantic-release/github",
       {
-        "releaseBodyTemplate": "<%= fs.readFileSync('GITHUB_RELEASE_BODY','utf-8') %>"
+        "draftRelease": true,
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %><%\n  const seen = new Set();\n  const isBot = (id) => /\\[bot\\]$/i.test(id || '') || /(^|-)bot($|-)/i.test(id || '');\n  const contributors = [];\n  (commits || []).forEach(c => {\n    const a = c.author || {};\n    const login = (a.login || a.username || '').trim();\n    const name = (a.name || '').trim() || ((a.email || '').split('@')[0] || '').trim();\n    const key = (login || name || '').toLowerCase();\n    if (!key || isBot(key) || seen.has(key)) return;\n    seen.add(key);\n    const display = login ? `[@${login}](https://github.com/${login})` : name;\n    contributors.push(display);\n  });\n%><% if (contributors.length) { %>\n\n### Contributors\n<% contributors.forEach(u => { %>- <%= u %>\n<% }) %><% } %>"
       }
     ]
   ]
