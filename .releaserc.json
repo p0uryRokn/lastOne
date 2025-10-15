@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "footerPartial": "\\n\\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+          "footerPartial": "\\n\\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})",
           "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author}})"
         },
         "presetConfig": {
