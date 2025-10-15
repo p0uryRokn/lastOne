@@ -26,9 +26,6 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits",
-        "writerOpts": {
-          "footerPartial": "### Contributors\n{{#each committers}}\n- {{name}} ({{email}})\n{{/each}}\n"
-        },
         "presetConfig": {
           "types": [
             { "type": "feat", "section": "Features" },
@@ -47,15 +44,15 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo '### 👥 Contributors' > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an (%ae)' | sort | uniq >> CONTRIBUTORS.md",
-        "publishCmd": "export CONTRIBUTORS_BODY=\"$(cat CONTRIBUTORS.md)\""
+        "prepareCmd": "echo '### 👥 Contributors' > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an' | sort | uniq >> CONTRIBUTORS.md",
+        "publishCmd": "export CONTRIBUTORS_BODY=\"$(cat CONTRIBUTORS.md)\" && echo \"$RELEASE_NOTES\\n\\n$CONTRIBUTORS_BODY\" > release_notes_with_contributors.md"
       }
     ],
     [
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n${process.env.CONTRIBUTORS_BODY}\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
+        "releaseBodyTemplate": "release_notes_with_contributors.md"
       }
     ]
   ]
