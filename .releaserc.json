@@ -27,7 +27,10 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})\n\n{{> contributors}}"
+        },
+        "partials": {
+          "contributors": "\n### Contributors\n{{#each committers}}\n- {{this.name}} ([@{{this.username}}](https://github.com/{{this.username}}))\n{{/each}}\n"
         },
         "presetConfig": {
           "types": [
@@ -42,6 +45,12 @@
             { "type": "ci", "section": "Continuous Integration" }
           ]
         }
+      }
+    ],
+    [
+      "semantic-release-contributors",
+      {
+        "format": "### 👥 Contributors\n{{#each contributors}}\n- {{#if username}}[@{{username}}](https://github.com/{{username}}){{else}}{{name}}{{/if}}\n{{/each}}\n"
       }
     ],
     [
