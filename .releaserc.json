@@ -48,7 +48,7 @@
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %><%\n  const seen = new Set();\n  const isBot = (id) => /\\[bot\\]$/i.test(id || '') || /(^|-)bot($|-)/i.test(id || '');\n  const contributors = [];\n  (commits || []).forEach(c => {\n    const a = c.author || {};\n    const login = (a.login || a.username || '').trim();\n    const name = (a.name || '').trim() || ((a.email || '').split('@')[0] || '').trim();\n    const key = (login || name || '').toLowerCase();\n    if (!key || isBot(key) || seen.has(key)) return;\n    seen.add(key);\n    contributors.push(login ? '@' + login : name);\n  });\n%><% if (contributors.length) { %>\n\n### Contributors\n<% contributors.forEach(u => { %>- <%= u %>\n<% }) %><% } %>"
       }
     ]
   ]
