@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})\n\n{{#if committers.length}}\n### 👥 Contributors\n{{#each committers}}\n- {{this.name}} {{#if this.username}}([@{{this.username}}](https://github.com/{{this.username}})){{/if}}\n{{/each}}\n{{/if}}"
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
         },
         "presetConfig": {
           "types": [
@@ -47,14 +47,15 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "echo \"### 👥 Contributors\" > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an (%ae)' | sort | uniq >> CONTRIBUTORS.md"
+        "prepareCmd": "echo '### 👥 Contributors' > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an (%ae)' | sort | uniq >> CONTRIBUTORS.md",
+        "publishCmd": "export CONTRIBUTORS_BODY=\"$(cat CONTRIBUTORS.md)\""
       }
     ],
     [
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n<%= require('fs').readFileSync('CONTRIBUTORS.md', 'utf8') %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
+        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n${process.env.CONTRIBUTORS_BODY}\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
       }
     ]
   ]
