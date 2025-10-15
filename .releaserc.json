@@ -48,7 +48,8 @@
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\\n\\n**Full Changelog:** [<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+        "releaseBodyTemplate": "<%= nextRelease.notes %><% if (lastRelease && lastRelease.gitTag) { %>\n\n**Full Changelog:** [<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)<% } %>"
+
       }
     ]
   ]
