@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-          "mainTemplate": "## What's Changed\n\n{{> commits}}",
+          "mainTemplate": "## What's Changed\n\n{{> commit}}",
           "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}})",
           "footerPartial": "\\n\\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})"
         },
