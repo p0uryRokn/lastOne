@@ -39,17 +39,18 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
 
-      - name: Overwrite body with GitHub-generated notes (exact format)
-        if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
+      - name: Overwrite release with GitHub-generated notes
+        if: ${{ always() && steps.semantic.outputs.new_release_published == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.semantic.outputs.new_release_git_tag }}
           PREV: ${{ steps.semantic.outputs.last_release_git_tag }}
         run: |
           set -e
-          echo "Updating release body for tag $TAG (prev: $PREV)"
+          echo "Generating GitHub-native notes for $TAG"
           body="$(gh api repos/${GITHUB_REPOSITORY}/releases/generate-notes \
                     -f tag_name="$TAG" \
                     ${PREV:+-f previous_tag_name="$PREV"} \
                     -q .body)"
           gh release edit "$TAG" --notes "$body"
+
