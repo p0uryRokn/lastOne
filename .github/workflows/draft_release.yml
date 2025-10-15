@@ -39,18 +39,28 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
 
-      - name: Overwrite release with GitHub-generated notes
-        if: ${{ always() && steps.semantic.outputs.new_release_published == 'true' }}
+      - name: Overwrite body with GitHub-generated notes (exact format)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ steps.semantic.outputs.new_release_git_tag }}
-          PREV: ${{ steps.semantic.outputs.last_release_git_tag }}
         run: |
           set -e
-          echo "Generating GitHub-native notes for $TAG"
+      
+          # Find the latest release tag and the previous one
+          latest_tag="$(gh release list --limit 1 --json tagName -q '.[0].tagName' || true)"
+          if [ -z "$latest_tag" ]; then
+            echo "No releases found; skipping."
+            exit 0
+          fi
+      
+          # Try to get the previous tag by creation date (skip the latest)
+          prev_tag="$(gh release list --limit 2 --json tagName -q '.[1].tagName' || true)"
+      
+          # Optional: bail out if this latest release wasn’t created in this run (e.g., no new release)
+          # You can compare createdAt timestamp or skip this guard if you run this workflow only on release runs.
+      
+          echo "Updating release body for $latest_tag (prev: ${prev_tag:-none})"
           body="$(gh api repos/${GITHUB_REPOSITORY}/releases/generate-notes \
-                    -f tag_name="$TAG" \
-                    ${PREV:+-f previous_tag_name="$PREV"} \
+                    -f tag_name="$latest_tag" \
+                    ${prev_tag:+-f previous_tag_name="$prev_tag"} \
                     -q .body)"
-          gh release edit "$TAG" --notes "$body"
-
+          gh release edit "$latest_tag" --notes "$body"
