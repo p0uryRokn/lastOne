@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "presetConfig": {
-          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/v{{previousTag}}...v{{currentTag}})",
+          "footerPartial": "\n\n[Full Changelog](https://github.com/owner/repo/compare/{{previousTag}}...{{currentTag}})",
           "types": [
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug Fixes" },
