@@ -27,7 +27,7 @@
       {
         "preset": "conventionalcommits",
         "writerOpts": {
-            "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}}) ([{{shortHash}}]({{@root.linkReferences}}/commit/{{hash}}))\n"
+            "commitPartial": "* {{#if scope}}**{{scope}}:** {{/if}}{{subject}} (by @{{author.name}}) {{#if @root.host}}([{{shortHash}}]({{@root.host}}/{{@root.owner}}/{{@root.repository}}/commit/{{hash}})){{else if @root.linkReferences}}([{{shortHash}}]({{@root.linkReferences}}/commit/{{hash}})){{else}}`{{shortHash}}`{{/if}}\n"
         },
         "presetConfig": {
           "types": [
