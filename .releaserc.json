@@ -23,25 +23,6 @@
       }
     ],
     [
-      "@semantic-release/release-notes-generator",
-      {
-        "preset": "conventionalcommits",
-        "presetConfig": {
-          "types": [
-            { "type": "feat", "section": "Features" },
-            { "type": "fix", "section": "Bug Fixes" },
-            { "type": "chore", "section": "Chores" },
-            { "type": "test", "section": "Tests" },
-            { "type": "docs", "section": "Documentation" },
-            { "type": "refactor", "section": "Refactoring" },
-            { "type": "style", "section": "Style" },
-            { "type": "build", "section": "Build System" },
-            { "type": "ci", "section": "Continuous Integration" }
-          ]
-        }
-      }
-    ],
-    [
       "@semantic-release/github",
       { "draftRelease": true }
     ]
