@@ -42,17 +42,10 @@
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "echo '### 👥 Contributors' > CONTRIBUTORS.md && git log $(git describe --tags --abbrev=0)..HEAD --format='- %an' | sort | uniq >> CONTRIBUTORS.md",
-        "publishCmd": "export CONTRIBUTORS_BODY=\"$(cat CONTRIBUTORS.md)\" && echo \"$RELEASE_NOTES\\n\\n$CONTRIBUTORS_BODY\" > release_notes_with_contributors.md"
-      }
-    ],
-    [
       "@semantic-release/github",
       {
         "draftRelease": true,
-        "releaseBodyTemplate": "release_notes_with_contributors.md"
+        "releaseBodyTemplate": "<%= nextRelease.notes %>\n\n### 👥 Contributors\n<% try { %>\n<% const { execSync } = require('child_process'); %>\n<% const repo = execSync('git config --get remote.origin.url').toString().trim().match(/github\\.com[:/](.*)\\.git$/)[1]; %>\n<% const fetch = require('node-fetch'); %>\n<% const contributors = await fetch(`https://api.github.com/repos/${repo}/contributors?per_page=100`, {\n  headers: { 'User-Agent': 'semantic-release', 'Accept': 'application/vnd.github+json' }\n}).then(r => r.json()); %>\n<%= contributors.map(c => `[![@${c.login}](${c.avatar_url}&s=40)](${c.html_url})`).join(' ') %>\n<% } catch (e) { %>\n_No contributor data available._\n<% } %>\n\n[Full Changelog](../../compare/<%= lastRelease.gitTag %>...<%= nextRelease.gitTag %>)"
       }
     ]
   ]
