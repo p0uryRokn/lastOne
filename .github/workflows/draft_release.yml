@@ -1,6 +1,6 @@
 name: Release
 on:
-  workflow_dispatch: {} 
+  workflow_dispatch: {}
 
 permissions:
   contents: read # for checkout
@@ -14,24 +14,31 @@ jobs:
       issues: write # to be able to comment on released issues
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
+
       - name: Install dependencies
         run: npm clean-install
+
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
-      - name: Release
+
+      - name: Run Semantic Release
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+
       - name: Overwrite body with GitHub-generated notes (exact format)
         if: ${{ steps.semantic.outputs.new_release_published == 'true' }}
         env:
@@ -40,11 +47,9 @@ jobs:
           PREV: ${{ steps.semantic.outputs.last_release_git_tag }}
         run: |
           set -e
-          # Ask GitHub to generate the official notes (includes What's Changed, New Contributors, Full Changelog, etc.)
+          echo "Updating release body for tag $TAG (prev: $PREV)"
           body="$(gh api repos/${GITHUB_REPOSITORY}/releases/generate-notes \
                     -f tag_name="$TAG" \
                     ${PREV:+-f previous_tag_name="$PREV"} \
                     -q .body)"
-          # Replace the release body with GitHub's generated content
           gh release edit "$TAG" --notes "$body"
-
